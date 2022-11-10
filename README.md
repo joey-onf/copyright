@@ -2,6 +2,7 @@
 This repository contains scripts used for bulk copyright maintenance across multiple repositories.
 
 ## Notice
+Copyright 2022 Open Networking Foundation (ONF) and the ONF Contributors
 Copyright 2017-2022 Open Networking Foundation (ONF) and the ONF Contributors
 
 Copyright {date_0}-{date_1} Open Networking Foundation (ONF) and the ONF Contributors
@@ -15,4 +16,6 @@ Copyright {date_0}-{date_1} Open Networking Foundation (ONF) and the ONF Contrib
    * Provide samples of copyright notices used in the code base.
    * Write a traversal script to iterate over a repository checkout,
      search for copyright notices and validate syntax.
- 
+
+## Slide deck for copyright notice and licensing (circa: 2019).
+https://docs.google.com/presentation/d/1Z0diSoTVpVb5EnjEt4UtGpPMIeQKx12G/edit#slide=id.p22

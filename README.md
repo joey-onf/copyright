@@ -19,3 +19,12 @@ Copyright {date_0}-{date_1} Open Networking Foundation (ONF) and the ONF Contrib
 
 ## Slide deck for copyright notice and licensing (circa: 2019).
 https://docs.google.com/presentation/d/1Z0diSoTVpVb5EnjEt4UtGpPMIeQKx12G/edit#slide=id.p22
+
+## Notice generation
+
+```shell:
+% ./gen-copyright.sh                         # span: *current_year*
+% ./gen-copyright.sh --start 2019            # span: *2019-current_year*
+% ./gen-copyright.sh --start 2019 --end 2023 # span: *2019-2023*
+
+```

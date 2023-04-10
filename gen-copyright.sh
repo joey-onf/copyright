@@ -6,8 +6,7 @@
 ##-------------------##
 ##---]  GLOBALS  [---##
 ##-------------------##
-# declare -g start_year
-declare -g end_year
+declare -i -g end_year
 
 ## -----------------------------------------------------------------------
 ## Intent:
@@ -23,7 +22,12 @@ function error()
 ## -----------------------------------------------------------------------
 function init()
 {
-    end_year="$(date '+%Y')"
+    end_year=$(date '+%Y')
+
+    declare -g pgmdir
+    pgmabs="$(realpath --physical "$0")"
+    pgmdir="${pgmabs%/*}"
+
     return
 }
 
@@ -33,10 +37,9 @@ function init()
 function get_template
 {
     declare -n ans=$1; shift
+    declare -g pgmdir
 
-    local pgmdir="${0%/*}"
-    local pgmabs="$(realpath "$pgmdir")"
-    local template="$pgmabs/copyright.tmpl"
+    local template="$pgmdir/copyright.tmpl"
     readarray -t tmp <"$template"
 
     ans=("${tmp[@]}")
@@ -93,7 +96,11 @@ declare -a tmpl
 get_template tmpl
 
 datestr="$end_year"
-[[ -v start_year ]] && datestr="${start_year}-${end_year}"
+if [[ -v start_year ]]; then
+    [[ $start_year -gt $end_year ]] \
+	&& error "Date error detected: $start_year > $end_year"
+   datestr="${start_year}-${end_year}"
+fi
 
 declare -a out=()
 for line in "${tmpl[@]}";

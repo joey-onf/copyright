@@ -83,10 +83,15 @@ while [ $# -gt 0 ]; do
     arg="$1"; shift
     case "$arg" in
 	-*start*)
-	    declare -i -g start_year="$1";
-	    shift
+	    [[ $# -eq 0 ]] && error "Required --start [s]"
+	    declare -i -g start_year="$1"; shift
+	    readonly start_year
 	    ;;
-	-*end*) end_year="$1"; shift ;;
+	-*end*)
+	    [[ $# -eq 0 ]] && error "Required --end [e]"
+	    declare -i -g end_year="$1"; shift
+	    readonly end_year
+	    ;;
 	-*help) usage; exit 0 ;;
 	*) error "Detected unknown switch [$arg] $*" ;;
     esac

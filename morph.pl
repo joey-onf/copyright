@@ -24,8 +24,7 @@ sub notice
     my @buffer = ('Copyright');
     push(@buffer, @range);
     push(@buffer, 'Open Networking Foundation (ONF) and the ONF Contributors');
-    push(@buffer, '\n');
-    return join(' ', @buffer);
+    return join(' ', @buffer) . "\n";
 }
 
 ## -----------------------------------------------------------------------
@@ -37,7 +36,9 @@ sub replace_copyright
     my ($line, @range) = @_;
 
     my $loc = index($line, 'opyright');
-    substr($line, $loc-1, length($line), notice($start));
+    my $span = join('-', @range);
+
+    substr($line, $loc-1, length($line), notice($span));
     return $line;
 }
 
@@ -56,47 +57,60 @@ while (<>)
     }
 
     # ---------------------------------------------------
-    # Copyright (c) 2011, 2012 Open Networking Foundation
+    # Copyright (c) Open Networking Foundation
     #   - Change non-standard notice into standard.
     # ---------------------------------------------------
     if (!/Copyright\s*\(c\)/oi) {}
     elsif ($line =~ /Open\s+Networking\s+Foundation/oi) {
-        my ($start) = $line =~ /(\d{4})/;
-
-        $line = replace_copyright($line, $start);
+        my @range = $line =~ /(\d{4})/;
+        if ($range[0] != $year)
+        {
+            # Create a range from single legacy date
+            push(@range, $year);
+        }
+        $line = replace_copyright($line, @range);
         print $line;
         next LINE;
     }
-    
+
+    # -------------------------------------------------------------------------------------------
+    # SPDX-FileCopyrightText: 2023-2024 Open Networking Foundation (ONF) and the ONF Contributors
+    # -------------------------------------------------------------------------------------------
+    if (my ($span) = /SPDX-FileCopyrightText: .*(\d{4}) Open Networking Foundation/i)
+    {
+        my @range = ($span);
+        push(@range, $year) if ($range[0] ne $year);
+
+        my $loc = index($line, 'SPDX-FileCopyrightText');
+        my $span = join('-', @range);
+        my $notice = notice($span);
+        substr($notice, 0, length('Copyright'), 'SPDX-FileCopyrightText:');
+        substr($line, $loc, length($line), $notice);
+        print $line;
+        next LINE;
+    }
+
     # ----------------------------------------
     # Augment ending date to span current year
     # ----------------------------------------
-    if (my ($val) = m/Copyright (.+) Open Networking Foundation/)
+    if (my ($val) = m/Copyright (.+) Open Networking FOundation/)
     {
         my $loc = index($line, $val);
         my $len = length($val);
-        $val =~ s/\s+//;
 
-        my @fields = split(/-/, $val);
-        if (2 > 0+@fields)
-        {
-            next LINE if ($fields[0] > $year); # End date is wonky (year > now)
-            push(@fields, $year) if ($fields[0] != $year);
-        }
-        else
-        {
-            pop(@fields);
-            push(@fields, $year);
-        }
+        my ($start) = $val =~ /(\d{4})/;
+        next LINE if ($start > $year); # Notice date is wonky (year > now)
+
+        my @fields = ($start);
+        push(@fields, $year) if ($fields[0] ne $year);
 
         my $span = join('-', @fields);
-        $span = $year if ($span eq "$year-$year"); # {year}-present
-        $_ = replace_copyright($line, $start);
+        $_ = replace_copyright($line, $span);
     }
 
     print;
 }
 
-# Copyright 2019-2023 Open Networking Foundation (ONF) and the ONF Contributors
+# Copyright 2019-2024 Open Networking Foundation (ONF) and the ONF Contributors
 
 # [EOF]

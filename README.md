@@ -2,11 +2,11 @@
 This repository contains scripts used for bulk copyright maintenance across multiple repositories.
 
 ## Notice
-Copyright 2022 Open Networking Foundation (ONF) and the ONF Contributors
-Copyright 2017-2022 Open Networking Foundation (ONF) and the ONF Contributors
+Copyright 2024 Open Networking Foundation (ONF) and the ONF Contributors
+Copyright 2017-2024 Open Networking Foundation (ONF) and the ONF Contributors
 
-Copyright {date_0}-{date_1} Open Networking Foundation (ONF) and the ONF Contributors
-   * format - CCYY (2022)  {century}-2_digits, {year}-2_digits
+Copyright 2024 Open Networking Foundation (ONF) and the ONF Contributors
+   * format - CCYY (2024)  {century}-2_digits, {year}-2_digits
    * date_0 - Initial date work was created or introduced.
    * date_1 - Year sources were last modified, value cannot be open-ended.
    *        - Values such as -current or -present are invalid.

@@ -14,6 +14,8 @@ use warnings;
 my @now = localtime;
 my $year = 1900 + $now[5];
 
+my $debug = 0;
+
 ## -----------------------------------------------------------------------
 ## Intent: Preserve string prefix for a line (comments, indentation, etc).
 ##   Return copyright notice string with date substitution.
@@ -60,8 +62,15 @@ while (<>)
     # Copyright (c) Open Networking Foundation
     #   - Change non-standard notice into standard.
     # ---------------------------------------------------
-    if (!/Copyright\s*\(c\)/oi) {}
-    elsif ($line =~ /Open\s+Networking\s+Foundation/oi) {
+    if (!/Copyright\s*\(c\)/oi)
+    {
+        print "RULE[0]: $line" if ($debug);
+        # Fall through
+    }
+    elsif ($line =~ /Open\s+Networking\s+Foundation/oi)
+    {
+        # Special snowflake
+        print "RULE[1]: $line" if ($debug);
         my @range = $line =~ /(\d{4})/;
         if ($range[0] != $year)
         {
@@ -78,6 +87,7 @@ while (<>)
     # -------------------------------------------------------------------------------------------
     if (my ($span) = /SPDX-FileCopyrightText: .*(\d{4}) Open Networking Foundation/i)
     {
+        print "RULE[2]: $line" if ($debug);
         my @range = ($span);
         push(@range, $year) if ($range[0] ne $year);
 
@@ -93,8 +103,9 @@ while (<>)
     # ----------------------------------------
     # Augment ending date to span current year
     # ----------------------------------------
-    if (my ($val) = m/Copyright (.+) Open Networking FOundation/)
+    if (my ($val) = m/Copyright (.+) Open Networking FOundation/oi)
     {
+        print "RULE[3]: $line" if ($debug);
         my $loc = index($line, $val);
         my $len = length($val);
 

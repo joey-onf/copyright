@@ -53,7 +53,7 @@ function usage()
 {
     [[ $# -gt 0 ]] && echo "** $*"
 
-    local onf_suffix='Open Networking Foundation (ONF) and the ONF Contributors'
+    local onf_suffix='Open Networking Foundation Contributors'
 
     cat <<EOH
 Usage: $0 [options] ...
